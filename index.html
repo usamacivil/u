@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. [Your Name] — Geotechnical Engineering</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#0d1321', 800: '#141e33', 700: '#1c2a47', 600: '#243358', 500: '#2e4070' },
+            amber: { DEFAULT: '#c8963e', light: '#e0b468', dark: '#9f7530' },
+            slate: { cool: '#8899aa', lighter: '#b0bfcc', lightest: '#d8e2ea' },
+            cream: { DEFAULT: '#f5f1eb', warm: '#ede8e0' },
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+            mono: ['DM Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    html { font-family: 'DM Sans', sans-serif; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0d1321; }
+    ::-webkit-scrollbar-thumb { background: #c8963e; border-radius: 4px; }
+
+    /* ── Nav glass ── */
+    #navbar {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* ── Hero grain overlay ── */
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1;
+    }
+
+    /* ── Animated underline ── */
+    .nav-link {
+      position: relative;
+      color: #b0bfcc;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 1px;
+      background: #c8963e;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover { color: #f5f1eb; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── Section reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Amber rule ── */
+    .amber-rule { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .amber-rule span { display: block; height: 2px; width: 40px; background: #c8963e; flex-shrink: 0; }
+    .amber-rule p { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: #c8963e; font-weight: 600; }
+
+    /* ── Publication card ── */
+    .pub-card {
+      border-left: 2px solid #243358;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .pub-card:hover { border-color: #c8963e; background: rgba(200,150,62,0.04); }
+
+    /* ── Pill tag ── */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .pill-amber { background: rgba(200,150,62,0.14); color: #e0b468; }
+    .pill-blue  { background: rgba(46,64,112,0.6);   color: #8899aa; }
+    .pill-green { background: rgba(40,100,80,0.3);   color: #70c9a0; }
+
+    /* ── Software grid ── */
+    .soft-card {
+      border: 1px solid #1c2a47;
+      padding: 1.5rem;
+      border-radius: 4px;
+      transition: border-color 0.25s, transform 0.25s;
+      background: #141e33;
+    }
+    .soft-card:hover { border-color: #c8963e; transform: translateY(-3px); }
+
+    /* ── Stat counter ── */
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.75rem; font-weight: 800; color: #c8963e; line-height: 1; }
+
+    /* ── Hero diagonal ── */
+    .hero-diag { clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); }
+
+    /* ── Contact link ── */
+    .contact-link {
+      display: flex; align-items: center; gap: 0.75rem;
+      color: #b0bfcc; font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .contact-link:hover { color: #e0b468; }
+    .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── Section divider dot ── */
+    .dot-divider { display: flex; align-items: center; gap: 0.5rem; justify-content: center; margin: 5rem 0; }
+    .dot-divider span { display: block; border-radius: 50%; background: #243358; }
+
+    /* ── Course badge ── */
+    .course-row {
+      display: flex; align-items: flex-start; gap: 1.25rem;
+      padding: 1rem 0; border-bottom: 1px solid #1c2a47;
+    }
+    .course-code {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: #c8963e; white-space: nowrap; padding-top: 3px;
+      min-width: 90px;
+    }
+  </style>
+</head>
+
+<body class="bg-navy text-cream" style="background-color:#0d1321; color:#f5f1eb;">
+
+  <!-- ════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b" style="background:rgba(13,19,33,0.88); border-color:#1c2a47;">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#home" class="font-serif font-bold text-base tracking-wide text-cream" style="color:#f5f1eb;">
+        Dr. <span style="color:#c8963e;">[Your Name]</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#research"      class="nav-link">Research</a>
+        <a href="#publications"  class="nav-link">Publications</a>
+        <a href="#software"      class="nav-link">Software</a>
+        <a href="#teaching"      class="nav-link">Teaching</a>
+        <a href="#contact"       class="nav-link">Contact</a>
+      </div>
+      <!-- Mobile menu button -->
+      <button id="menu-btn" class="md:hidden" style="color:#b0bfcc;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col gap-4" style="border-top:1px solid #1c2a47;">
+      <a href="#research"     class="nav-link pt-4" onclick="toggleMenu()">Research</a>
+      <a href="#publications" class="nav-link"       onclick="toggleMenu()">Publications</a>
+      <a href="#software"     class="nav-link"       onclick="toggleMenu()">Software</a>
+      <a href="#teaching"     class="nav-link"       onclick="toggleMenu()">Teaching</a>
+      <a href="#contact"      class="nav-link"       onclick="toggleMenu()">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════
+       HERO
+  ════════════════════════════════ -->
+  <section id="home" class="relative min-h-screen flex items-center grain hero-diag overflow-hidden" style="background: linear-gradient(135deg, #0a101e 0%, #0d1321 50%, #111b2e 100%);">
+    <!-- Background geometric accent -->
+    <div class="absolute right-0 top-0 h-full w-1/2 opacity-10 pointer-events-none" style="background: radial-gradient(ellipse at 70% 30%, #2e4070 0%, transparent 65%); z-index:0;"></div>
+    <div class="absolute inset-0 pointer-events-none" style="z-index:0;">
+      <div class="absolute right-20 top-32 w-72 h-72 rounded-full" style="border:1px solid rgba(200,150,62,0.08);"></div>
+      <div class="absolute right-32 top-20 w-48 h-48 rounded-full" style="border:1px solid rgba(200,150,62,0.05);"></div>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-6 pt-28 pb-24 grid lg:grid-cols-2 gap-16 items-center" style="z-index:2;">
+      <!-- Left: text -->
+      <div>
+        <div class="amber-rule mb-8">
+          <span></span>
+          <p>Geotechnical Engineering</p>
+        </div>
+        <h1 class="font-serif font-bold leading-tight mb-6" style="font-size:clamp(2.5rem,6vw,4.2rem); color:#f5f1eb;">
+          Dr. [Your<br/>Full Name]
+        </h1>
+        <p class="text-lg mb-2 font-light" style="color:#b0bfcc;">
+          Assistant Professor, Civil &amp; Environmental Engineering
+        </p>
+        <p class="text-sm mb-10 font-medium tracking-wider uppercase" style="color:#c8963e;">
+          [Your University] · [City, Country]
+        </p>
+        <p class="leading-relaxed mb-10 max-w-lg" style="color:#8899aa; font-size:0.95rem;">
+          My research lies at the intersection of earthquake engineering, geomechanics, and computational modeling — advancing our understanding of how soil and structural systems interact under dynamic loading to build more resilient infrastructure.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#research" class="px-6 py-3 font-semibold text-sm tracking-wide transition-all duration-200"
+            style="background:#c8963e; color:#0d1321; border-radius:2px;">
+            Explore Research →
+          </a>
+          <a href="#contact" class="px-6 py-3 font-semibold text-sm tracking-wide transition-all duration-200"
+            style="border:1px solid #243358; color:#b0bfcc; border-radius:2px;"
+            onmouseover="this.style.borderColor='#c8963e';this.style.color='#e0b468'"
+            onmouseout="this.style.borderColor='#243358';this.style.color='#b0bfcc'">
+            Get in Touch
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: stats card -->
+      <div class="hidden lg:block">
+        <div class="p-8 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+          <p class="text-xs font-mono tracking-widest uppercase mb-6" style="color:#8899aa;">Research Profile</p>
+          <div class="grid grid-cols-2 gap-8">
+            <div>
+              <div class="stat-num">24+</div>
+              <p class="text-xs mt-2 uppercase tracking-wide" style="color:#8899aa;">Publications</p>
+            </div>
+            <div>
+              <div class="stat-num">350+</div>
+              <p class="text-xs mt-2 uppercase tracking-wide" style="color:#8899aa;">Citations</p>
+            </div>
+            <div>
+              <div class="stat-num">8</div>
+              <p class="text-xs mt-2 uppercase tracking-wide" style="color:#8899aa;">Grad Students</p>
+            </div>
+            <div>
+              <div class="stat-num">12+</div>
+              <p class="text-xs mt-2 uppercase tracking-wide" style="color:#8899aa;">Yrs. Experience</p>
+            </div>
+          </div>
+          <div class="mt-8 pt-6" style="border-top:1px solid #1c2a47;">
+            <p class="text-xs uppercase tracking-wider mb-3" style="color:#8899aa;">Active Keywords</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="pill pill-amber">Earthquake Eng.</span>
+              <span class="pill pill-blue">Pile Foundations</span>
+              <span class="pill pill-green">SSI</span>
+              <span class="pill pill-blue">OpenSeesPy</span>
+              <span class="pill pill-amber">Shake Table</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40" style="z-index:2;">
+      <p class="text-xs tracking-widest uppercase font-mono" style="color:#8899aa;">scroll</p>
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" style="color:#c8963e; animation:bounce 2s infinite;">
+        <path d="M7 1v14M1 11l6 6 6-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       RESEARCH INTERESTS
+  ════════════════════════════════ -->
+  <section id="research" class="py-24" style="background:#0f1724;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal amber-rule">
+        <span></span><p>Area of Focus</p>
+      </div>
+      <h2 class="reveal font-serif font-bold mb-4" style="font-size:clamp(2rem,4vw,3rem); color:#f5f1eb;">
+        Research Interests
+      </h2>
+      <p class="reveal mb-14 max-w-xl" style="color:#8899aa; font-size:0.95rem; line-height:1.8;">
+        My work addresses fundamental challenges in geotechnical earthquake engineering, combining rigorous numerical methods with large-scale experimental validation.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="reveal soft-card" style="transition-delay:0.05s;">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm mb-5" style="background:rgba(200,150,62,0.12);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2l10 10M4 10v10h6v-6h4v6h6V10"/></svg>
+          </div>
+          <h3 class="font-serif font-semibold text-xl mb-3" style="color:#f5f1eb;">Earthquake Engineering</h3>
+          <p class="text-sm leading-relaxed" style="color:#8899aa;">
+            Seismic hazard assessment, ground motion characterization, and the performance-based design of civil infrastructure under rare and extreme earthquake events.
+          </p>
+          <div class="mt-5 pt-4" style="border-top:1px solid #243358;">
+            <p class="text-xs uppercase tracking-wide" style="color:#c8963e;">Key Topics</p>
+            <p class="text-xs mt-1" style="color:#8899aa;">Site response · Liquefaction · Seismic risk</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="reveal soft-card" style="transition-delay:0.12s;">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm mb-5" style="background:rgba(200,150,62,0.12);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <h3 class="font-serif font-semibold text-xl mb-3" style="color:#f5f1eb;">Soil–Structure Interaction</h3>
+          <p class="text-sm leading-relaxed" style="color:#8899aa;">
+            Nonlinear SSI analysis for bridges, buildings, and offshore structures, with emphasis on kinematic and inertial coupling mechanisms during seismic loading.
+          </p>
+          <div class="mt-5 pt-4" style="border-top:1px solid #243358;">
+            <p class="text-xs uppercase tracking-wide" style="color:#c8963e;">Key Topics</p>
+            <p class="text-xs mt-1" style="color:#8899aa;">Foundation impedance · DSSI · Nonlinear springs</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="reveal soft-card" style="transition-delay:0.2s;">
+          <div class="w-10 h-10 flex items-center justify-center rounded-sm mb-5" style="background:rgba(200,150,62,0.12);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <h3 class="font-serif font-semibold text-xl mb-3" style="color:#f5f1eb;">Dynamic Response of Piles</h3>
+          <p class="text-sm leading-relaxed" style="color:#8899aa;">
+            Experimental and computational investigation of single and group pile response, including 1g shake table campaigns and large-scale centrifuge testing programs.
+          </p>
+          <div class="mt-5 pt-4" style="border-top:1px solid #243358;">
+            <p class="text-xs uppercase tracking-wide" style="color:#c8963e;">Key Topics</p>
+            <p class="text-xs mt-1" style="color:#8899aa;">Kinematic forces · p-y curves · Pile-group effects</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="dot-divider" style="background:#0d1321; padding: 0 0;">
+    <span style="width:4px;height:4px;"></span>
+    <span style="width:6px;height:6px;opacity:0.6;"></span>
+    <span style="width:4px;height:4px;"></span>
+  </div>
+
+  <!-- ════════════════════════════════
+       PUBLICATIONS
+  ════════════════════════════════ -->
+  <section id="publications" class="py-24" style="background:#0d1321;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal amber-rule"><span></span><p>Peer-Reviewed Output</p></div>
+      <h2 class="reveal font-serif font-bold mb-2" style="font-size:clamp(2rem,4vw,3rem); color:#f5f1eb;">Publications</h2>
+      <p class="reveal mb-14" style="color:#8899aa; font-size:0.95rem;">
+        See the full list on
+        <a href="#" style="color:#c8963e; text-decoration:underline;">Google Scholar</a> ·
+        <a href="#" style="color:#c8963e; text-decoration:underline;">ResearchGate</a>
+      </p>
+
+      <!-- Journal Papers -->
+      <div class="reveal mb-12">
+        <div class="flex items-center gap-4 mb-6">
+          <h3 class="font-serif text-xl font-semibold" style="color:#f5f1eb;">Journal Articles</h3>
+          <span class="pill pill-amber">Peer-Reviewed</span>
+        </div>
+
+        <div class="space-y-2">
+          <!-- ★ swap each block for your actual papers ★ -->
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Title of Journal Paper 1: Nonlinear Seismic Response of Pile Foundations in Liquefiable Soils]</p>
+            <p class="text-xs mb-2" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author A, Co-Author B (2024). <em>Soil Dynamics and Earthquake Engineering</em>, 178, 108–121.</p>
+            <div class="flex gap-3">
+              <a href="#" class="text-xs" style="color:#c8963e;">DOI: 10.1016/j.soildyn.2024.xxxxxx →</a>
+              <span class="pill pill-green text-xs">Open Access</span>
+            </div>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Title of Journal Paper 2: Shake Table Validation of a Coupled SSI Model for Offshore Monopiles]</p>
+            <p class="text-xs mb-2" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author C (2023). <em>Computers and Geotechnics</em>, 162, 105–119.</p>
+            <a href="#" class="text-xs" style="color:#c8963e;">DOI: 10.1016/j.compgeo.2023.xxxxxx →</a>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Title of Journal Paper 3: OpenSeesPy-Based Framework for 3D Dynamic Soil–Pile Analysis]</p>
+            <p class="text-xs mb-2" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author D, Co-Author E (2022). <em>Journal of Geotechnical and Geoenvironmental Engineering</em>, 148(9).</p>
+            <a href="#" class="text-xs" style="color:#c8963e;">DOI: 10.1061/JGGEFK.GTENG-xxxx →</a>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Title of Journal Paper 4: Kinematic Pile–Soil Interaction Under Near-Fault Ground Motions]</p>
+            <p class="text-xs mb-2" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author F (2021). <em>Earthquake Engineering &amp; Structural Dynamics</em>, 50(12), 3101–3118.</p>
+            <a href="#" class="text-xs" style="color:#c8963e;">DOI: 10.1002/eqe.xxxx →</a>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Title of Journal Paper 5: Effect of Slenderness Ratio on Seismic Performance of Bored Piles]</p>
+            <p class="text-xs mb-2" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author G (2020). <em>International Journal of Geomechanics</em>, 20(6).</p>
+            <a href="#" class="text-xs" style="color:#c8963e;">DOI: 10.1061/(ASCE)GM.1943-5622.xxxxxxx →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conference Papers -->
+      <div class="reveal">
+        <div class="flex items-center gap-4 mb-6">
+          <h3 class="font-serif text-xl font-semibold" style="color:#f5f1eb;">Conference Proceedings</h3>
+          <span class="pill pill-blue">Peer-Reviewed</span>
+        </div>
+
+        <div class="space-y-2">
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Conference Paper 1 Title: 3D Numerical Modelling of Pile Groups Using PLAXIS 3D]</p>
+            <p class="text-xs" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author H (2024). <em>17th World Conference on Earthquake Engineering (17WCEE)</em>, Sendai, Japan.</p>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Conference Paper 2 Title: Experimental Assessment of SSI Effects on RC Bridge Piers]</p>
+            <p class="text-xs" style="color:#8899aa;"><span style="color:#c-auth">Your Name</span>, Co-Author I, Co-Author J (2023). <em>ICEGE 2023</em>, Rome, Italy.</p>
+          </div>
+
+          <div class="pub-card">
+            <p class="text-sm font-medium mb-1" style="color:#f5f1eb;">[Conference Paper 3 Title: 1g Shake Table Testing of Laterally Loaded Pile Models]</p>
+            <p class="text-xs" style="color:#8899aa;"><span style="color:#c8963e;">Your Name</span>, Co-Author K (2022). <em>Geotechnical Earthquake Engineering and Soil Dynamics VI (GEESD VI)</em>, ASCE.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       SOFTWARE & METHODOLOGY
+  ════════════════════════════════ -->
+  <section id="software" class="py-24" style="background:#0f1724;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal amber-rule"><span></span><p>Computational Tools</p></div>
+      <h2 class="reveal font-serif font-bold mb-4" style="font-size:clamp(2rem,4vw,3rem); color:#f5f1eb;">Software &amp; Methodology</h2>
+      <p class="reveal mb-14 max-w-xl" style="color:#8899aa; font-size:0.95rem; line-height:1.8;">
+        Our group integrates high-fidelity numerical modeling with physical experimentation to bridge the gap between simulated and real-world soil behavior.
+      </p>
+
+      <!-- Numerical Tools -->
+      <div class="reveal mb-10">
+        <p class="text-xs uppercase tracking-widest mb-5 font-semibold" style="color:#c8963e;">Numerical Modeling Platforms</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">FEM</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">PLAXIS 3D</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">3D finite-element geotechnical modeling, advanced constitutive models (HSS, PM4Sand)</p>
+            </div>
+          </div>
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">FEM</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">OpenSeesPy</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">Python-based structural/geotechnical FE analysis, nonlinear dynamic time-history simulation</p>
+            </div>
+          </div>
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">FEM</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">Code_Aster</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">Open-source thermomechanical simulation; coupled dynamic SSI analyses</p>
+            </div>
+          </div>
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">BEM</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">SASSI / DEEPSOIL</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">Frequency-domain SSI, site response analysis with nonlinear soil columns</p>
+            </div>
+          </div>
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">Script</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">Python / MATLAB</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">Signal processing, probabilistic hazard scripts, post-processing pipelines</p>
+            </div>
+          </div>
+          <div class="soft-card flex gap-4 items-start">
+            <span class="font-mono text-xs px-2 py-1 rounded" style="background:#1c2a47; color:#c8963e; margin-top:2px;">DEM</span>
+            <div>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">PFC / FLAC 3D</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">Particle-scale granular mechanics and continuum dynamic soil simulations</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experimental -->
+      <div class="reveal">
+        <p class="text-xs uppercase tracking-widest mb-5 font-semibold" style="color:#c8963e;">Experimental Capabilities</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="soft-card">
+            <div class="flex items-center gap-3 mb-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">1g Shake Table Testing</p>
+            </div>
+            <p class="text-xs leading-relaxed" style="color:#8899aa;">
+              Small- to medium-scale physical simulations of seismic soil-pile systems, instrumented with accelerometers, strain gauges, and LVDT sensors to validate numerical predictions.
+            </p>
+          </div>
+          <div class="soft-card">
+            <div class="flex items-center gap-3 mb-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8963e" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p class="font-semibold text-sm" style="color:#f5f1eb;">In-Situ Field Testing</p>
+            </div>
+            <p class="text-xs leading-relaxed" style="color:#8899aa;">
+              Collaboration with industry partners on full-scale pile load tests (static and cyclic), borehole geophysics, and CPTu data interpretation for constitutive model calibration.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       TEACHING & ADMINISTRATION
+  ════════════════════════════════ -->
+  <section id="teaching" class="py-24" style="background:#0d1321;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal amber-rule"><span></span><p>Instruction &amp; Service</p></div>
+      <h2 class="reveal font-serif font-bold mb-14" style="font-size:clamp(2rem,4vw,3rem); color:#f5f1eb;">Teaching &amp; Administration</h2>
+
+      <div class="grid lg:grid-cols-2 gap-16">
+        <!-- Courses -->
+        <div class="reveal">
+          <h3 class="font-serif text-xl font-semibold mb-6" style="color:#f5f1eb;">Courses Taught</h3>
+
+          <div class="course-row">
+            <span class="course-code">CEE 301</span>
+            <div>
+              <p class="text-sm font-medium" style="color:#f5f1eb;">Soil Mechanics</p>
+              <p class="text-xs mt-0.5" style="color:#8899aa;">Undergraduate · Fall · 45 students</p>
+            </div>
+          </div>
+          <div class="course-row">
+            <span class="course-code">CEE 412</span>
+            <div>
+              <p class="text-sm font-medium" style="color:#f5f1eb;">Foundation Engineering</p>
+              <p class="text-xs mt-0.5" style="color:#8899aa;">Undergraduate · Spring · 38 students</p>
+            </div>
+          </div>
+          <div class="course-row">
+            <span class="course-code">CEE 520</span>
+            <div>
+              <p class="text-sm font-medium" style="color:#f5f1eb;">Geotechnical Earthquake Engineering</p>
+              <p class="text-xs mt-0.5" style="color:#8899aa;">Graduate · Fall · 15 students</p>
+            </div>
+          </div>
+          <div class="course-row">
+            <span class="course-code">CEE 615</span>
+            <div>
+              <p class="text-sm font-medium" style="color:#f5f1eb;">Advanced Soil–Structure Interaction</p>
+              <p class="text-xs mt-0.5" style="color:#8899aa;">Graduate · Spring · 10 students</p>
+            </div>
+          </div>
+          <div class="course-row" style="border-bottom:none;">
+            <span class="course-code">CEE 700</span>
+            <div>
+              <p class="text-sm font-medium" style="color:#f5f1eb;">Numerical Methods in Geomechanics</p>
+              <p class="text-xs mt-0.5" style="color:#8899aa;">Graduate Seminar · Spring · 8 students</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin & Service -->
+        <div class="reveal">
+          <h3 class="font-serif text-xl font-semibold mb-6" style="color:#f5f1eb;">Administrative &amp; International Roles</h3>
+          <div class="space-y-5">
+            <div class="p-4 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+              <p class="text-sm font-semibold mb-1" style="color:#f5f1eb;">International Student Coordinator</p>
+              <p class="text-xs leading-relaxed" style="color:#8899aa;">Overseeing academic integration and mentorship programs for incoming international graduate students in the department, coordinating orientation, academic advising pipelines, and cultural transition support.</p>
+            </div>
+            <div class="p-4 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+              <p class="text-sm font-semibold mb-1" style="color:#f5f1eb;">Graduate Admissions Committee</p>
+              <p class="text-xs leading-relaxed" style="color:#8899aa;">Member of the department graduate admissions panel; reviewing and evaluating applications for M.Sc. and Ph.D. programs in Civil and Environmental Engineering.</p>
+            </div>
+            <div class="p-4 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+              <p class="text-sm font-semibold mb-1" style="color:#f5f1eb;">Peer Reviewer</p>
+              <p class="text-xs leading-relaxed" style="color:#8899aa;">Active reviewer for <em>Géotechnique</em>, <em>Soil Dynamics and Earthquake Engineering</em>, <em>Computers and Geotechnics</em>, <em>JGGE (ASCE)</em>, and <em>Earthquake Engineering &amp; Structural Dynamics</em>.</p>
+            </div>
+            <div class="p-4 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+              <p class="text-sm font-semibold mb-1" style="color:#f5f1eb;">Erasmus+ / Exchange Program Liaison</p>
+              <p class="text-xs leading-relaxed" style="color:#8899aa;">Facilitating bilateral research and teaching exchange programs with partner institutions across Europe and Southeast Asia.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       CONTACT
+  ════════════════════════════════ -->
+  <section id="contact" class="py-24" style="background:#0a101e;">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="reveal amber-rule"><span></span><p>Reach Out</p></div>
+      <h2 class="reveal font-serif font-bold mb-4" style="font-size:clamp(2rem,4vw,3rem); color:#f5f1eb;">Contact</h2>
+      <p class="reveal mb-14 max-w-lg" style="color:#8899aa; font-size:0.95rem; line-height:1.8;">
+        I welcome inquiries from prospective graduate students, collaborators, and industry partners. Please reach out via email for research collaboration or graduate admission enquiries.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="reveal space-y-6">
+          <a href="mailto:yourname@university.edu" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest mb-0.5" style="color:#8899aa;">Email</p>
+              <span>yourname@university.edu</span>
+            </div>
+          </a>
+
+          <a href="#" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest mb-0.5" style="color:#8899aa;">Office</p>
+              <span>Room [XXX], [Building Name], [University Address]</span>
+            </div>
+          </a>
+
+          <a href="#" target="_blank" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3l-.5 3H13v6.8c4.56-.93 8-4.96 8-9.8z"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest mb-0.5" style="color:#8899aa;">ResearchGate</p>
+              <span>researchgate.net/profile/YourProfile</span>
+            </div>
+          </a>
+
+          <a href="#" target="_blank" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest mb-0.5" style="color:#8899aa;">Google Scholar</p>
+              <span>scholar.google.com/citations?user=XXXXXXXX</span>
+            </div>
+          </a>
+
+          <a href="#" target="_blank" class="contact-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            <div>
+              <p class="text-xs uppercase tracking-widest mb-0.5" style="color:#8899aa;">LinkedIn</p>
+              <span>linkedin.com/in/yourprofile</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Map / Address card -->
+        <div class="reveal">
+          <div class="h-full p-8 rounded-sm" style="background:#141e33; border:1px solid #1c2a47;">
+            <p class="text-xs uppercase tracking-widest mb-5 font-semibold" style="color:#c8963e;">Mailing Address</p>
+            <p class="font-serif font-semibold text-lg mb-1" style="color:#f5f1eb;">Dr. [Your Full Name]</p>
+            <p class="text-sm leading-relaxed" style="color:#8899aa;">
+              Department of Civil and Environmental Engineering<br/>
+              [Your University Name]<br/>
+              [Street Address]<br/>
+              [City, State / Province, ZIP]<br/>
+              [Country]
+            </p>
+            <div class="mt-6 pt-6" style="border-top:1px solid #1c2a47;">
+              <p class="text-xs uppercase tracking-widest mb-3" style="color:#8899aa;">Office Hours</p>
+              <p class="text-sm" style="color:#b0bfcc;">Tuesday &amp; Thursday, 14:00 – 16:00</p>
+              <p class="text-xs mt-1" style="color:#8899aa;">or by appointment — email preferred</p>
+            </div>
+            <div class="mt-6 pt-6 flex gap-3 flex-wrap" style="border-top:1px solid #1c2a47;">
+              <a href="mailto:yourname@university.edu" class="px-5 py-2.5 text-xs font-semibold tracking-wide transition" style="background:#c8963e; color:#0d1321; border-radius:2px;">Send Email →</a>
+              <a href="[your CV link]" class="px-5 py-2.5 text-xs font-semibold tracking-wide transition" style="border:1px solid #243358; color:#b0bfcc; border-radius:2px;"
+                onmouseover="this.style.borderColor='#c8963e';this.style.color='#e0b468'"
+                onmouseout="this.style.borderColor='#243358';this.style.color='#b0bfcc'">
+                Download CV
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       FOOTER
+  ════════════════════════════════ -->
+  <footer class="py-8 text-center" style="background:#080d18; border-top:1px solid #141e33;">
+    <p class="text-xs" style="color:#8899aa;">
+      © <span id="year"></span> Dr. [Your Name] · Civil &amp; Environmental Engineering ·
+      <a href="mailto:yourname@university.edu" style="color:#c8963e;">yourname@university.edu</a>
+    </p>
+  </footer>
+
+  <!-- ════════════════════════════════
+       JS: reveal + nav + mobile menu
+  ════════════════════════════════ -->
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+    document.getElementById('menu-btn').addEventListener('click', toggleMenu);
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Active nav link highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      navLinks.forEach(l => {
+        l.style.color = l.getAttribute('href') === '#' + current ? '#c8963e' : '';
+      });
+    }, { passive: true });
+  </script>
+
+  <!-- ════════════════════════════════
+       CUSTOMIZATION GUIDE (HTML comment)
+  ════════════════════════════════ -->
+  <!--
+  ┌──────────────────────────────────────────────────────────┐
+  │          CUSTOMIZATION GUIDE — WHERE TO EDIT             │
+  └──────────────────────────────────────────────────────────┘
+
+  1. NAME & TITLE
+     Search for "[Your Name]" and "[Your Full Name]" — replace
+     with your actual name everywhere it appears (~6 places).
+
+  2. INSTITUTION
+     Replace "[Your University]" and "[City, Country]" in the hero.
+
+  3. STATISTICS (Hero card)
+     Update the four stat numbers (Publications, Citations, etc.)
+     to match your actual profile numbers.
+
+  4. BIO PARAGRAPH
+     Edit the <p> in the hero section starting with "My research lies..."
+
+  5. PUBLICATIONS
+     Replace each pub-card block with your actual papers:
+     - Paper title
+     - Author list (bold your own name)
+     - Journal name, volume, pages, year
+     - DOI link (href)
+     Add as many pub-card <div> blocks as needed.
+
+  6. SOFTWARE
+     Edit the soft-card blocks to match your actual tool stack.
+     Add or remove cards freely — the grid is auto-responsive.
+
+  7. COURSES
+     Update each course-row with your actual course codes,
+     names, level, semester, and enrolment.
+
+  8. CONTACT
+     - Email: replace "yourname@university.edu" (3 occurrences)
+     - Office: replace room, building, address
+     - Links: update Google Scholar user ID, ResearchGate profile URL
+     - LinkedIn: update profile slug
+     - CV: change "[your CV link]" to a direct link or PDF path
+
+  9. COLORS (optional)
+     All colors are in the tailwind.config block at the top.
+     Primary accent: #c8963e (amber)
+     Background:     #0d1321 (deep navy)
+     Adjust to match your institution's brand palette.
+
+  10. PROFILE PHOTO (optional)
+      Add an <img> tag inside the hero right column, replacing
+      the stats card — or stack them. Recommended size: 400×500px,
+      object-fit: cover.
+
+  11. DEPLOYMENT
+      This is a single self-contained HTML file.
+      - GitHub Pages: push to /docs or root of your repo.
+      - Netlify/Vercel: drag-and-drop the file.
+      - University server: place in your public_html folder.
+  -->
+</body>
+</html>
