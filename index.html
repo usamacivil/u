@@ -7,22 +7,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --blue-deep:  #0b2d5e;
-            --blue-mid:   #1a4a8a;
+            --blue-deep: #0b2d5e;
+            --blue-mid: #1a4a8a;
             --blue-light: #2f6eb5;
-            --blue-soft:  #ddeaf8;
-            --blue-pale:  #f0f6ff;
-            --white:      #ffffff;
-            --ink:        #0e1f3b;
-            --text:       #334e6e;
-            --muted:      #7a93b0;
-            --line:       rgba(26,74,138,0.12);
+            --blue-soft: #ddeaf8;
+            --blue-pale: #f0f6ff;
+            --white: #ffffff;
+            --ink: #0e1f3b;
+            --text: #334e6e;
+            --muted: #7a93b0;
+            --line: rgba(26,74,138,0.12);
         }
 
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             background: var(--white);
@@ -31,187 +39,370 @@
             font-weight: 400;
             line-height: 1.7;
             overflow-x: hidden;
+            cursor: none;
         }
 
-        /* ── CURSOR ── */
-        .cursor      { width:10px; height:10px; background:var(--blue-light); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .15s; }
-        .cursor-ring { width:34px; height:34px; border:1.5px solid rgba(47,110,181,.35); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:transform .35s cubic-bezier(.25,.46,.45,.94); }
-        body { cursor: none; }
+        /* Custom cursor */
+        .cursor {
+            width: 10px;
+            height: 10px;
+            background: var(--blue-light);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%,-50%);
+            transition: transform .15s;
+        }
 
-        /* ── NAV ── */
+        .cursor-ring {
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid rgba(47,110,181,.35);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%,-50%);
+            transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+        }
+
+        /* Navigation */
         nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
             padding: 1.1rem 7%;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             transition: background .4s, box-shadow .4s;
         }
+
         nav.scrolled {
             background: rgba(255,255,255,0.96);
             backdrop-filter: blur(16px);
             box-shadow: 0 1px 0 var(--line);
         }
+
         .nav-logo {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem; font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--blue-deep);
             letter-spacing: .5px;
         }
+
         .nav-links a {
             color: var(--text);
             text-decoration: none;
             margin-left: 2rem;
-            font-size: .78rem; font-weight: 500;
-            letter-spacing: 1.8px; text-transform: uppercase;
+            font-size: .78rem;
+            font-weight: 500;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
             position: relative;
             transition: color .3s;
         }
+
         .nav-links a::after {
-            content:''; position:absolute; bottom:-3px; left:0;
-            width:0; height:1.5px; background:var(--blue-light);
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--blue-light);
             transition: width .3s;
         }
-        .nav-links a:hover { color: var(--blue-light); }
-        .nav-links a:hover::after { width:100%; }
 
-        /* ── HERO ── */
+        .nav-links a:hover {
+            color: var(--blue-light);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.96);
+            color: var(--blue-deep);
+            border-radius: 8px;
+            padding: .65rem .8rem;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: min(82vw, 320px);
+            padding: 6rem 1.5rem 2rem;
+            background: white;
+            box-shadow: 12px 0 40px rgba(11,45,94,.18);
+            flex-direction: column;
+            gap: .25rem;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            padding: .85rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--blue-deep);
+            font-size: .9rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .mobile-menu a:hover {
+            background: var(--blue-pale);
+        }
+
+        .menu-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(5,20,40,.38);
+        }
+
+        .menu-backdrop.open {
+            display: block;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Hero */
         .hero {
             min-height: 100vh;
             background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 55%, #1e5fa0 100%);
-            display: flex; align-items: center;
-            overflow: hidden; position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
             padding-top: 80px;
         }
 
-        /* animated diagonal lines */
         .hero-lines {
-            position: absolute; inset: 0;
-            background:
-                repeating-linear-gradient(
-                    -55deg,
-                    transparent,
-                    transparent 60px,
-                    rgba(255,255,255,0.025) 60px,
-                    rgba(255,255,255,0.025) 61px
-                );
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                -55deg,
+                transparent,
+                transparent 60px,
+                rgba(255,255,255,0.025) 60px,
+                rgba(255,255,255,0.025) 61px
+            );
         }
 
-        /* soft glow blobs */
         .blob {
-            position: absolute; border-radius: 50%;
-            filter: blur(90px); pointer-events: none;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
         }
-        .blob1 { width:500px; height:500px; background:rgba(255,255,255,0.06); top:-120px; right:-80px; animation: pulse 10s ease-in-out infinite; }
-        .blob2 { width:320px; height:320px; background:rgba(47,110,181,0.25); bottom:40px; left:-60px; animation: pulse 14s ease-in-out infinite reverse; }
-        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.06);
+            top: -120px;
+            right: -80px;
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        .blob2 {
+            width: 320px;
+            height: 320px;
+            background: rgba(47,110,181,0.25);
+            bottom: 40px;
+            left: -60px;
+            animation: pulse 14s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
 
         .hero-inner {
-            position: relative; z-index: 2;
-            max-width: 1140px; width: 100%;
-            margin: 0 auto; padding: 0 7%;
-            display: grid; grid-template-columns: 1fr 420px;
-            gap: 5rem; align-items: center;
+            position: relative;
+            z-index: 2;
+            max-width: 1140px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 7%;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 5rem;
+            align-items: center;
         }
 
-        /* ── HERO TEXT ── */
         .hero-eyebrow {
             display: inline-block;
-            font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
+            font-size: .7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             color: rgba(255,255,255,0.55);
             border: 1px solid rgba(255,255,255,0.2);
-            padding: .35rem .9rem; border-radius: 99px;
+            padding: .35rem .9rem;
+            border-radius: 99px;
             margin-bottom: 1.4rem;
-            opacity:0; animation: fadeUp .7s .15s forwards;
+            opacity: 0;
+            animation: fadeUp .7s .15s forwards;
         }
+
         .hero-name {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2.8rem, 5vw, 4.2rem);
-            font-weight: 700; color: var(--white);
-            line-height: 1.05; margin-bottom: .6rem;
-            opacity:0; animation: fadeUp .7s .3s forwards;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.05;
+            margin-bottom: .6rem;
+            opacity: 0;
+            animation: fadeUp .7s .3s forwards;
         }
-        .hero-name em { font-style: italic; color: rgba(255,255,255,0.7); }
+
+        .hero-name em {
+            font-style: italic;
+            color: rgba(255,255,255,0.7);
+        }
+
         .hero-role {
-            font-size: 1rem; color: rgba(255,255,255,0.65);
-            font-weight: 300; margin-bottom: .4rem;
-            opacity:0; animation: fadeUp .7s .45s forwards;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.65);
+            font-weight: 300;
+            margin-bottom: .4rem;
+            opacity: 0;
+            animation: fadeUp .7s .45s forwards;
         }
+
         .hero-inst {
-            font-size: .88rem; color: rgba(255,255,255,0.45);
+            font-size: .88rem;
+            color: rgba(255,255,255,0.45);
             margin-bottom: 2rem;
-            opacity:0; animation: fadeUp .7s .55s forwards;
+            opacity: 0;
+            animation: fadeUp .7s .55s forwards;
         }
+
         .hero-divider {
-            width: 48px; height: 2px;
+            width: 48px;
+            height: 2px;
             background: rgba(255,255,255,0.3);
             margin-bottom: 1.8rem;
-            opacity:0; animation: fadeUp .7s .6s forwards;
+            opacity: 0;
+            animation: fadeUp .7s .6s forwards;
         }
+
         .hero-bio {
-            font-size: .95rem; color: rgba(255,255,255,0.6);
-            line-height: 1.85; max-width: 520px;
-            opacity:0; animation: fadeUp .7s .7s forwards;
+            font-size: .95rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.85;
+            max-width: 520px;
+            opacity: 0;
+            animation: fadeUp .7s .7s forwards;
         }
+
         .hero-socials {
-            margin-top: 2.5rem; display: flex; gap: 1.2rem;
-            opacity:0; animation: fadeUp .7s .85s forwards;
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1.2rem;
+            opacity: 0;
+            animation: fadeUp .7s .85s forwards;
         }
+
         .hero-socials a {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.6); font-size: .95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            font-size: .95rem;
             transition: background .3s, color .3s, border-color .3s;
             text-decoration: none;
         }
+
         .hero-socials a:hover {
             background: rgba(255,255,255,0.12);
             color: var(--white);
             border-color: rgba(255,255,255,0.45);
         }
 
-        /* ── PHOTO ── */
+        /* Profile photo */
         .hero-photo-col {
-            display: flex; justify-content: center; align-items: flex-end;
-            opacity:0; animation: fadeUp .9s .5s forwards;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            animation: fadeUp .9s .5s forwards;
         }
+
         .photo-card {
             position: relative;
             width: 320px;
         }
-        /* white architectural frame */
+
         .photo-card::before {
-            content:'';
+            content: '';
             position: absolute;
-            top: -18px; left: -18px;
-            width: 100%; height: 100%;
+            top: -18px;
+            left: -18px;
+            width: 100%;
+            height: 100%;
             border: 1.5px solid rgba(255,255,255,0.18);
             border-radius: 4px;
         }
+
         .photo-card::after {
-            content:'';
+            content: '';
             position: absolute;
-            top: -36px; left: -36px;
-            width: 100%; height: 100%;
+            top: -36px;
+            left: -36px;
+            width: 100%;
+            height: 100%;
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 4px;
         }
+
         .photo-card img {
-            width: 100%; aspect-ratio: 3/4;
-            object-fit: cover; object-position: top center;
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            object-position: top center;
             border-radius: 4px;
             display: block;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
             box-shadow: 0 30px 60px rgba(0,0,0,0.35);
         }
-        /* floating label */
+
         .photo-label {
             position: absolute;
-            bottom: -14px; right: -14px;
+            bottom: -14px;
+            right: -14px;
             background: var(--white);
             color: var(--blue-deep);
-            font-size: .72rem; font-weight: 600;
-            letter-spacing: 1.5px; text-transform: uppercase;
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             padding: .6rem 1.1rem;
             border-radius: 4px;
             z-index: 2;
@@ -219,85 +410,161 @@
         }
 
         @keyframes fadeUp {
-            from { opacity:0; transform:translateY(22px); }
-            to   { opacity:1; transform:translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* ── SCROLL LINE ── */
         .scroll-hint {
-            position: absolute; bottom: 2.5rem; left: 7%;
-            display: flex; align-items: center; gap: .8rem;
+            position: absolute;
+            bottom: 2.5rem;
+            left: 7%;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
             color: rgba(255,255,255,0.3);
-            font-size: .68rem; letter-spacing: 2.5px; text-transform: uppercase;
+            font-size: .68rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
             z-index: 2;
         }
+
         .scroll-line {
-            width: 40px; height: 1px;
+            width: 40px;
+            height: 1px;
             background: rgba(255,255,255,0.25);
-            position: relative; overflow: hidden;
+            position: relative;
+            overflow: hidden;
         }
+
         .scroll-line::after {
-            content:'';
-            position: absolute; top:0; left:-100%;
-            width:100%; height:100%;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
             background: rgba(255,255,255,0.7);
             animation: scanLine 2s ease-in-out infinite;
         }
-        @keyframes scanLine { 0%{left:-100%} 100%{left:100%} }
 
-        /* ── CONTENT SECTIONS ── */
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Main content sections */
         .content-section {
-            max-width: 1140px; margin: 0 auto;
+            max-width: 1140px;
+            margin: 0 auto;
             padding: 90px 7%;
         }
-        .alt-bg { background: var(--blue-pale); }
-        .alt-bg .content-section { margin: 0 auto; }
+
+        .alt-bg {
+            background: var(--blue-pale);
+        }
+
+        .alt-bg .content-section {
+            margin: 0 auto;
+        }
 
         .sec-label {
-            font-size: .68rem; letter-spacing: 3.5px; text-transform: uppercase;
-            color: var(--blue-light); font-weight: 600; margin-bottom: .7rem;
+            font-size: .68rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--blue-light);
+            font-weight: 600;
+            margin-bottom: .7rem;
         }
+
         .sec-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(1.7rem, 2.8vw, 2.4rem);
-            font-weight: 700; color: var(--blue-deep);
-            line-height: 1.15; margin-bottom: 3rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            line-height: 1.15;
+            margin-bottom: 3rem;
         }
 
-        /* ── ABOUT ── */
+        /* About */
         .about-grid {
-            display: grid; grid-template-columns: 1.5fr 1fr;
-            gap: 5rem; align-items: start;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 5rem;
+            align-items: start;
         }
+
         .about-text p {
-            color: var(--text); line-height: 1.9; font-size: .97rem;
+            color: var(--text);
+            line-height: 1.9;
+            font-size: .97rem;
             margin-bottom: 1rem;
         }
-        .meta-list { list-style: none; }
+
+        .meta-list {
+            list-style: none;
+        }
+
         .meta-list li {
-            display: flex; gap: 1rem; align-items: flex-start;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
             padding: 1rem 0;
             border-bottom: 1px solid var(--line);
         }
-        .meta-list li:first-child { border-top: 1px solid var(--line); }
-        .meta-icon {
-            width: 34px; height: 34px; flex-shrink: 0;
-            border-radius: 8px; background: var(--blue-soft);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--blue-light); font-size: .85rem;
-        }
-        .meta-key {
-            font-size: .66rem; letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--muted); margin-bottom: .15rem;
-        }
-        .meta-val {
-            font-size: .88rem; color: var(--blue-deep); font-weight: 500;
-        }
-        .meta-val a { color: var(--blue-light); text-decoration: none; }
-        .meta-val a:hover { text-decoration: underline; }
 
-        /* ── EDUCATION ── */
-        .edu-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .meta-list li:first-child {
+            border-top: 1px solid var(--line);
+        }
+
+        .meta-icon {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            background: var(--blue-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-light);
+            font-size: .85rem;
+        }
+
+        .meta-key {
+            font-size: .66rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: .15rem;
+        }
+
+        .meta-val {
+            font-size: .88rem;
+            color: var(--blue-deep);
+            font-weight: 500;
+        }
+
+        .meta-val a {
+            color: var(--blue-light);
+            text-decoration: none;
+        }
+
+        .meta-val a:hover {
+            text-decoration: underline;
+        }
+
+        /* Education */
+        .edu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
         .edu-item {
             background: var(--white);
             border: 1px solid var(--line);
@@ -306,208 +573,532 @@
             padding: 1.6rem 2rem;
             transition: box-shadow .3s, transform .3s;
         }
+
         .edu-item:hover {
             box-shadow: 0 8px 30px rgba(11,45,94,0.08);
             transform: translateX(4px);
         }
+
         .edu-degree {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem; font-weight: 700;
-            color: var(--blue-deep); margin-bottom: .25rem;
-        }
-        .edu-uni {
-            font-size: .88rem; color: var(--text); margin-bottom: .2rem;
-        }
-        .edu-dates {
-            font-size: .75rem; color: var(--muted); letter-spacing: .5px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: .25rem;
         }
 
-        /* ── EXPERIENCE TIMELINE ── */
-        .timeline { position: relative; padding-left: 1.8rem; }
+        .edu-uni {
+            font-size: .88rem;
+            color: var(--text);
+            margin-bottom: .2rem;
+        }
+
+        .edu-dates {
+            font-size: .75rem;
+            color: var(--muted);
+            letter-spacing: .5px;
+        }
+
+        /* Experience timeline */
+        .timeline {
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
         .timeline::before {
-            content:''; position:absolute; left:0; top:6px;
-            width:1px; height:calc(100% - 12px);
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 1px;
+            height: calc(100% - 12px);
             background: linear-gradient(to bottom, var(--blue-light), var(--blue-soft));
         }
+
         .tl-item {
-            position: relative; padding: 0 0 3rem 2.2rem;
+            position: relative;
+            padding: 0 0 3rem 2.2rem;
         }
+
         .tl-item::before {
-            content:''; position:absolute; left:-7px; top:5px;
-            width:15px; height:15px; border-radius:50%;
-            background: var(--white); border: 2px solid var(--blue-light);
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--blue-light);
             transition: background .3s, transform .3s;
         }
-        .tl-item:hover::before { background: var(--blue-light); transform: scale(1.3); }
-        .tl-period {
-            font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--blue-light); margin-bottom: .5rem; font-weight: 600;
+
+        .tl-item:hover::before {
+            background: var(--blue-light);
+            transform: scale(1.3);
         }
+
+        .tl-period {
+            font-size: .72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--blue-light);
+            margin-bottom: .5rem;
+            font-weight: 600;
+        }
+
         .tl-role {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem; font-weight: 700;
-            color: var(--blue-deep); margin-bottom: .2rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: .2rem;
         }
+
         .tl-org {
-            font-size: .85rem; color: var(--muted); margin-bottom: .8rem;
+            font-size: .85rem;
+            color: var(--muted);
+            margin-bottom: .8rem;
         }
-        .tl-points { list-style: none; }
+
+        .tl-points {
+            list-style: none;
+        }
+
         .tl-points li {
-            font-size: .9rem; color: var(--text); line-height: 1.75;
-            padding-left: 1.1rem; position: relative; margin-bottom: .35rem;
+            font-size: .9rem;
+            color: var(--text);
+            line-height: 1.75;
+            padding-left: 1.1rem;
+            position: relative;
+            margin-bottom: .35rem;
         }
+
         .tl-points li::before {
-            content:''; position:absolute; left:0; top:.7em;
-            width:5px; height:5px; border-radius:50%;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: .7em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
             background: var(--blue-light);
         }
-        .tl-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+
+        .tl-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: 1rem;
+        }
+
         .chip {
-            font-size: .7rem; padding: .3rem .85rem; border-radius:99px;
-            background: var(--blue-soft); color: var(--blue-mid);
-            font-weight: 600; letter-spacing: .3px;
+            font-size: .7rem;
+            padding: .3rem .85rem;
+            border-radius: 99px;
+            background: var(--blue-soft);
+            color: var(--blue-mid);
+            font-weight: 600;
+            letter-spacing: .3px;
             transition: background .3s, color .3s;
         }
-        .chip:hover { background: var(--blue-mid); color: var(--white); }
 
-        /* ── RESEARCH ── */
+        .chip:hover {
+            background: var(--blue-mid);
+            color: var(--white);
+        }
+
+        /* Research interests */
         .research-grid {
-            display: grid; grid-template-columns: repeat(3,1fr);
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
             gap: 1.4rem;
         }
+
         .r-card {
             background: var(--white);
             border: 1px solid var(--line);
-            border-radius: 8px; padding: 1.8rem;
-            position: relative; overflow: hidden;
+            border-radius: 8px;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
             transition: box-shadow .3s, transform .3s;
         }
+
         .r-card::before {
-            content:''; position:absolute; top:0; left:0;
-            width:100%; height:3px;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
             background: linear-gradient(90deg, var(--blue-mid), var(--blue-light));
-            transform: scaleX(0); transform-origin: left;
+            transform: scaleX(0);
+            transform-origin: left;
             transition: transform .4s;
         }
-        .r-card:hover { box-shadow: 0 12px 32px rgba(11,45,94,0.1); transform: translateY(-3px); }
-        .r-card:hover::before { transform: scaleX(1); }
-        .r-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            background: var(--blue-soft); color: var(--blue-mid);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; margin-bottom: 1rem;
+
+        .r-card:hover {
+            box-shadow: 0 12px 32px rgba(11,45,94,0.1);
+            transform: translateY(-3px);
         }
+
+        .r-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .r-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--blue-soft);
+            color: var(--blue-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
         .r-card h3 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem; font-weight: 700;
-            color: var(--blue-deep); margin-bottom: .5rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: .5rem;
         }
-        .r-card p { font-size: .86rem; color: var(--text); line-height: 1.7; }
 
-        /* ── SKILLS ── */
+        .r-card p {
+            font-size: .86rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Technical skills */
         .skills-grid {
-            display: grid; grid-template-columns: repeat(2,1fr);
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
             gap: 1.4rem;
         }
+
         .skill-block {
             background: var(--white);
             border: 1px solid var(--line);
-            border-radius: 8px; padding: 1.8rem;
+            border-radius: 8px;
+            padding: 1.8rem;
         }
-        .skill-block h3 {
-            font-size: .7rem; letter-spacing: 2px; text-transform: uppercase;
-            color: var(--blue-light); font-weight: 600; margin-bottom: 1rem;
-        }
-        .chips { display:flex; flex-wrap:wrap; gap:.5rem; }
 
-        /* ── PUBLICATIONS ── */
-        .pub-list { display: flex; flex-direction: column; gap: 1.2rem; }
+        .skill-block h3 {
+            font-size: .7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--blue-light);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        /* Publications */
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
         .pub-item {
             background: var(--white);
             border: 1px solid var(--line);
-            border-radius: 6px; padding: 1.6rem 2rem;
+            border-radius: 6px;
+            padding: 1.6rem 2rem;
             transition: box-shadow .3s;
         }
-        .pub-item:hover { box-shadow: 0 8px 28px rgba(11,45,94,0.09); }
+
+        .pub-item:hover {
+            box-shadow: 0 8px 28px rgba(11,45,94,0.09);
+        }
+
         .pub-authors {
-            font-size: .78rem; color: var(--muted); margin-bottom: .4rem;
+            font-size: .78rem;
+            color: var(--muted);
+            margin-bottom: .4rem;
         }
-        .pub-authors strong { color: var(--blue-deep); }
+
+        .pub-authors strong {
+            color: var(--blue-deep);
+        }
+
         .pub-title {
-            font-size: .95rem; color: var(--blue-deep);
-            font-weight: 500; line-height: 1.5; margin-bottom: .4rem;
+            font-size: .95rem;
+            color: var(--blue-deep);
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: .4rem;
         }
+
         .pub-venue {
-            font-size: .8rem; color: var(--blue-light);
+            font-size: .8rem;
+            color: var(--blue-light);
             font-style: italic;
         }
 
-        /* ── GRANTS / AWARDS ── */
-        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+        .pub-subsection {
+            margin-bottom: 2.5rem;
+        }
+
+        .pub-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+        }
+
+        .pub-meta {
+            font-size: .76rem;
+            color: var(--muted);
+            margin-top: .5rem;
+            line-height: 1.8;
+        }
+
+        .pub-meta a {
+            color: var(--blue-light);
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+
+        .pub-meta a:hover {
+            text-decoration: underline;
+        }
+
+        /* Grants and awards */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
+        }
+
         .award-item {
             background: var(--white);
             border: 1px solid var(--line);
             border-left: 3px solid var(--blue-light);
-            border-radius: 6px; padding: 1.4rem 1.6rem;
+            border-radius: 6px;
+            padding: 1.4rem 1.6rem;
             transition: transform .3s, box-shadow .3s;
         }
-        .award-item:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(11,45,94,0.08); }
-        .award-name { font-size: .9rem; font-weight: 600; color: var(--blue-deep); margin-bottom: .3rem; }
-        .award-detail { font-size: .82rem; color: var(--text); }
 
-        /* ── CONTACT ── */
-        .contact-wrap {
-            display: flex; gap: 1.2rem; flex-wrap: wrap;
+        .award-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 6px 20px rgba(11,45,94,0.08);
         }
+
+        .award-name {
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--blue-deep);
+            margin-bottom: .3rem;
+        }
+
+        .award-detail {
+            font-size: .82rem;
+            color: var(--text);
+        }
+
+        /* Contact */
+        .contact-wrap {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
         .c-card {
-            flex: 1; min-width: 200px;
+            flex: 1;
+            min-width: 200px;
             background: var(--white);
-            border: 1px solid var(--line); border-radius: 8px;
-            padding: 1.8rem; text-align: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 1.8rem;
+            text-align: center;
             transition: box-shadow .3s, transform .3s;
         }
-        .c-card:hover { box-shadow: 0 10px 30px rgba(11,45,94,0.1); transform: translateY(-3px); }
-        .c-card i { font-size: 1.4rem; color: var(--blue-light); margin-bottom: .8rem; display: block; }
-        .c-label { font-size: .66rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
-        .c-val { font-size: .88rem; color: var(--blue-deep); font-weight: 500; }
-        .c-val a { color: var(--blue-light); text-decoration: none; }
-        .c-val a:hover { text-decoration: underline; }
 
-        /* ── FOOTER ── */
+        .c-card:hover {
+            box-shadow: 0 10px 30px rgba(11,45,94,0.1);
+            transform: translateY(-3px);
+        }
+
+        .c-card i {
+            font-size: 1.4rem;
+            color: var(--blue-light);
+            margin-bottom: .8rem;
+            display: block;
+        }
+
+        .c-label {
+            font-size: .66rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: .3rem;
+        }
+
+        .c-val {
+            font-size: .88rem;
+            color: var(--blue-deep);
+            font-weight: 500;
+        }
+
+        .c-val a {
+            color: var(--blue-light);
+            text-decoration: none;
+        }
+
+        .c-val a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer and visitor counter */
         footer {
             background: var(--blue-deep);
             color: rgba(255,255,255,0.4);
-            text-align: center; padding: 2.5rem 7%;
+            text-align: center;
+            padding: 2.5rem 7%;
             font-size: .78rem;
         }
-        footer span { color: rgba(255,255,255,0.7); }
 
-        /* ── REVEAL ── */
-        .reveal { opacity:0; transform:translateY(30px); transition: opacity .7s ease, transform .7s ease; }
-        .reveal.in-view { opacity:1; transform:translateY(0); }
-        .reveal.d1 { transition-delay:.1s; }
-        .reveal.d2 { transition-delay:.2s; }
-        .reveal.d3 { transition-delay:.3s; }
+        footer span {
+            color: rgba(255,255,255,0.7);
+        }
 
-        /* ── RESPONSIVE ── */
+        .visitor-counter {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .45rem;
+        }
+
+        .visitor-counter-label {
+            font-size: .68rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.48);
+        }
+
+        .visitor-counter img {
+            max-width: 100%;
+            height: auto;
+            border: 0;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal.d1 {
+            transition-delay: .1s;
+        }
+
+        .reveal.d2 {
+            transition-delay: .2s;
+        }
+
+        .reveal.d3 {
+            transition-delay: .3s;
+        }
+
+        /* Responsive layout */
         @media (max-width: 900px) {
-            .hero-inner { grid-template-columns: 1fr; text-align: center; }
-            .hero-photo-col { order: -1; }
-            .photo-card { width: 200px; }
-            .scroll-hint { display: none; }
-            .about-grid, .two-col, .skills-grid, .research-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-photo-col {
+                order: -1;
+            }
+
+            .photo-card {
+                width: 200px;
+            }
+
+            .scroll-hint {
+                display: none;
+            }
+
+            .about-grid,
+            .two-col,
+            .skills-grid,
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            nav {
+                padding: .9rem 5%;
+            }
+
+            .hero-inner {
+                gap: 2.5rem;
+                padding: 0 6%;
+            }
+
+            .content-section {
+                padding: 70px 6%;
+            }
+
+            .pub-item {
+                padding: 1.25rem;
+            }
+
+            .skill-block[style*="grid-column"] {
+                grid-column: auto !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="cursor"      id="cur"></div>
+<div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curR"></div>
 
-<!-- ── NAV ── -->
+<!-- Navigation -->
 <nav id="nav">
     <div class="nav-logo">Dr. Usama Zafar</div>
+
     <div class="nav-links">
         <a href="#about">About</a>
         <a href="#education">Education</a>
@@ -516,9 +1107,28 @@
         <a href="#publications">Publications</a>
         <a href="#contact">Contact</a>
     </div>
+
+    <button class="menu-toggle"
+            id="menuToggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobileMenu">
+        <i class="fas fa-bars"></i>
+    </button>
 </nav>
 
-<!-- ── HERO ── -->
+<div class="menu-backdrop" id="menuBackdrop"></div>
+
+<div class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
+    <a href="#research">Research</a>
+    <a href="#publications">Publications</a>
+    <a href="#contact">Contact</a>
+</div>
+
+<!-- Hero -->
 <header class="hero">
     <div class="hero-lines"></div>
     <div class="blob blob1"></div>
@@ -526,31 +1136,63 @@
 
     <div class="hero-inner">
         <div>
-            <div class="hero-eyebrow">Structural/Geotechnical Earthquake Engineering · SSI</div>
+            <div class="hero-eyebrow">
+                Structural/Geotechnical Earthquake Engineering · SSI
+            </div>
+
             <h1 class="hero-name">Usama Zafar,<br><em>Ph.D.</em></h1>
-            <p class="hero-role">Assistant Professor · Civil Engineering</p>
-            <p class="hero-inst">Department of Civil and Environmental Engineering, Saitama University, Japan</p>
-            <div class="hero-divider"></div>
-            <p class="hero-bio">
-                Bridging geotechnical and structural disciplines through high-fidelity numerical
-                modelling and experimental investigation of soil–pile–structure systems under seismic loading.
+
+            <p class="hero-role">
+                Assistant Professor · Civil Engineering
             </p>
+
+            <p class="hero-inst">
+                Department of Civil and Environmental Engineering,
+                Saitama University, Japan
+            </p>
+
+            <div class="hero-divider"></div>
+
+            <p class="hero-bio">
+                Bridging geotechnical and structural disciplines through
+                high-fidelity numerical modelling and experimental investigation
+                of soil–pile–structure systems under seismic loading.
+            </p>
+
             <div class="hero-socials">
-                <a href="https://www.linkedin.com/in/usamazafarcircle" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://orcid.org/0000-0002-3933-3537" title="ORCID"><i class="fab fa-orcid"></i></a>
-                <a href="mailto:uzcivil@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-                <a href="https://eq.civil.saitama-u.ac.jp/usama_zafar" title="Research Group"><i class="fas fa-globe"></i></a>
+                <a href="https://www.linkedin.com/in/usamazafarcircle"
+                   title="LinkedIn"
+                   aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+
+                <a href="https://orcid.org/0000-0002-3933-3537"
+                   title="ORCID"
+                   aria-label="ORCID">
+                    <i class="fab fa-orcid"></i>
+                </a>
+
+                <a href="mailto:uzcivil@gmail.com"
+                   title="Email"
+                   aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+
+                <a href="https://eq.civil.saitama-u.ac.jp/usama_zafar"
+                   title="Research Group"
+                   aria-label="Research Group">
+                    <i class="fas fa-globe"></i>
+                </a>
             </div>
         </div>
 
         <div class="hero-photo-col">
             <div class="photo-card">
-                <!--
-                    Photo: me.png must be in the SAME folder as index.html on GitHub.
-                    If your file is named differently, change "me.png" below to match.
-                -->
-                <img src="me.png" alt="Dr. Usama Zafar"
+                <!-- Keep me.png in the same folder as index.html. -->
+                <img src="me.png"
+                     alt="Dr. Usama Zafar"
                      onerror="this.style.background='#1a4a8a';this.style.minHeight='360px'">
+
                 <div class="photo-label">Saitama University</div>
             </div>
         </div>
@@ -562,332 +1204,750 @@
     </div>
 </header>
 
-<!-- ── ABOUT ── -->
-<div id="about">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Background</div><h2 class="sec-title">Professional Summary</h2></div>
-    <div class="about-grid">
-        <div class="about-text reveal">
-            <p>
-                Assistant Professor of Civil Engineering with specialized expertise in
-                <strong>Structural/Geotechnical Earthquake Engineering</strong> and Soil–Structure Interaction (SSI).
-                Research bridges the gap between geotechnical and structural disciplines, utilizing
-                high-fidelity numerical modelling and experimental investigations to evaluate the dynamic
-                response of soil–pile–structure systems.
-            </p>
-            <p>
-                Expert in nonlinear soil behaviour, foundation dynamics, and the seismic performance of
-                deep foundations under multi-directional loading. Actively engaged in funded research
-                initiatives and graduate supervision, with specific experience mentoring diverse cohorts
-                within the International Graduate Program.
-            </p>
-            <p>
-                Dedicated to advancing resilient infrastructure and incorporating research-driven
-                approaches into teaching. Skilled in supporting international students through academic
-                advising and research guidance.
-            </p>
+<!-- About -->
+<section id="about">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Background</div>
+            <h2 class="sec-title">Professional Summary</h2>
         </div>
-        <ul class="meta-list reveal d2">
-            <li>
-                <div class="meta-icon"><i class="fas fa-university"></i></div>
-                <div><div class="meta-key">Institution</div><div class="meta-val">Saitama University, Japan</div></div>
-            </li>
-            <li>
-                <div class="meta-icon"><i class="fas fa-envelope"></i></div>
-                <div><div class="meta-key">Email</div><div class="meta-val"><a href="mailto:uzcivil@gmail.com">uzcivil@gmail.com</a></div></div>
-            </li>
-            <li>
-                <div class="meta-icon"><i class="fas fa-phone"></i></div>
-                <div><div class="meta-key">Phone</div><div class="meta-val">+81-804952-5087</div></div>
-            </li>
-            <li>
-                <div class="meta-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div><div class="meta-key">Location</div><div class="meta-val">Saitama, Japan</div></div>
-            </li>
-            <li>
-                <div class="meta-icon"><i class="fas fa-globe"></i></div>
-                <div><div class="meta-key">Research Group</div><div class="meta-val"><a href="https://eq.civil.saitama-u.ac.jp/usama_zafar" target="_blank">eq.civil.saitama-u.ac.jp</a></div></div>
-            </li>
-            <li>
-                <div class="meta-icon"><i class="fab fa-orcid"></i></div>
-                <div><div class="meta-key">ORCID</div><div class="meta-val"><a href="https://orcid.org/0000-0002-3933-3537" target="_blank">0000-0002-3933-3537</a></div></div>
-            </li>
-        </ul>
-    </div>
-</div>
-</div>
 
-<!-- ── EDUCATION ── -->
-<div id="education" class="alt-bg">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Academic Formation</div><h2 class="sec-title">Education</h2></div>
-    <div class="edu-list">
-        <div class="edu-item reveal">
-            <div class="edu-degree">Ph.D., Civil and Environmental Engineering</div>
-            <div class="edu-uni">Saitama University, Saitama, Japan</div>
-            <div class="edu-dates">October 2019 – September 2022</div>
-        </div>
-        <div class="edu-item reveal d1">
-            <div class="edu-degree">M.Eng., Civil and Environmental Engineering</div>
-            <div class="edu-uni">Saitama University, Saitama, Japan</div>
-            <div class="edu-dates">October 2017 – September 2019</div>
-        </div>
-        <div class="edu-item reveal d2">
-            <div class="edu-degree">Bachelor of Science in Civil Engineering</div>
-            <div class="edu-uni">University of Engineering and Technology Lahore, Pakistan</div>
-            <div class="edu-dates">October 2011 – June 2015 · Graduated with Honors</div>
-        </div>
-    </div>
-</div>
-</div>
+        <div class="about-grid">
+            <div class="about-text reveal">
+                <p>
+                    Assistant Professor of Civil Engineering with specialized expertise in
+                    <strong>Structural/Geotechnical Earthquake Engineering</strong> and
+                    Soil–Structure Interaction (SSI). Research bridges the gap between
+                    geotechnical and structural disciplines, utilizing high-fidelity numerical
+                    modelling and experimental investigations to evaluate the dynamic response
+                    of soil–pile–structure systems.
+                </p>
 
-<!-- ── EXPERIENCE ── -->
-<div id="experience">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Career</div><h2 class="sec-title">Professional Experience</h2></div>
-    <div class="timeline">
-        <div class="tl-item reveal">
-            <div class="tl-period">Oct 2022 – Present</div>
-            <div class="tl-role">Assistant Professor</div>
-            <div class="tl-org">Department of Civil and Environmental Engineering · Saitama University</div>
-            <ul class="tl-points">
-                <li>Research on nonlinear soil–pile and soil–structure interaction using experimental testing and FEM tools including Code_Aster, PLAXIS 3D, DIANA FEA, ABAQUS, and OpenSeesPy.</li>
-                <li>Led a funded research project on vertical kinematic pile response under seismic loading, conducting vertical base-excitation experiments to quantify pile group dynamic behaviour.</li>
-                <li>Co-supervised graduate research projects; contributed to international program administration.</li>
-                <li>Delivered lectures in Scientific &amp; Technological English and International Communication; guest lectures in Earthquake Engineering, SSI, Pile Dynamics, and Structural Analysis.</li>
-                <li>Participated as Keynote Speaker at an international conference on seismic soil–pile interaction.</li>
+                <p>
+                    Expert in nonlinear soil behaviour, foundation dynamics, and the seismic
+                    performance of deep foundations under multi-directional loading. Actively
+                    engaged in funded research initiatives and graduate supervision, with
+                    specific experience mentoring diverse cohorts within the International
+                    Graduate Program.
+                </p>
+
+                <p>
+                    Dedicated to advancing resilient infrastructure and incorporating
+                    research-driven approaches into teaching. Skilled in supporting
+                    international students through academic advising and research guidance.
+                </p>
+            </div>
+
+            <ul class="meta-list reveal d2">
+                <li>
+                    <div class="meta-icon"><i class="fas fa-university"></i></div>
+                    <div>
+                        <div class="meta-key">Institution</div>
+                        <div class="meta-val">Saitama University, Japan</div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="meta-icon"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <div class="meta-key">Email</div>
+                        <div class="meta-val">
+                            <a href="mailto:uzcivil@gmail.com">uzcivil@gmail.com</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="meta-icon"><i class="fas fa-phone"></i></div>
+                    <div>
+                        <div class="meta-key">Phone</div>
+                        <div class="meta-val">+81-804952-5087</div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="meta-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <div class="meta-key">Location</div>
+                        <div class="meta-val">Saitama, Japan</div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="meta-icon"><i class="fas fa-globe"></i></div>
+                    <div>
+                        <div class="meta-key">Research Group</div>
+                        <div class="meta-val">
+                            <a href="https://eq.civil.saitama-u.ac.jp/usama_zafar"
+                               target="_blank"
+                               rel="noopener">
+                                eq.civil.saitama-u.ac.jp
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="meta-icon"><i class="fab fa-orcid"></i></div>
+                    <div>
+                        <div class="meta-key">ORCID</div>
+                        <div class="meta-val">
+                            <a href="https://orcid.org/0000-0002-3933-3537"
+                               target="_blank"
+                               rel="noopener">
+                                0000-0002-3933-3537
+                            </a>
+                        </div>
+                    </div>
+                </li>
             </ul>
-            <div class="tl-chips">
-                <span class="chip">PLAXIS 3D</span><span class="chip">Code_Aster</span><span class="chip">DIANA FEA</span><span class="chip">ABAQUS</span><span class="chip">OpenSeesPy</span><span class="chip">SSI</span>
-            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Education -->
+<section id="education" class="alt-bg">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Academic Formation</div>
+            <h2 class="sec-title">Education</h2>
         </div>
 
-        <div class="tl-item reveal d1">
-            <div class="tl-period">June 2015 – September 2017</div>
-            <div class="tl-role">Junior Structural Engineer</div>
-            <div class="tl-org">NESPAK — National Engineering Services of Pakistan</div>
-            <ul class="tl-points">
-                <li>Structural analysis of buildings, bridges, and towers using ETABS/SAP2000, STAAD.Pro, MIDAS Civil/Gen, and PLS Tower.</li>
-                <li>Developed seismic retrofitting strategies using FEM and site inspections; performed response spectrum analyses incorporating SSI.</li>
-                <li>Contributed to flyover and transport infrastructure design; reviewed structural designs for Pakistan Motorways and CPEC projects.</li>
-            </ul>
-            <div class="tl-chips">
-                <span class="chip">ETABS</span><span class="chip">SAP2000</span><span class="chip">STAAD.Pro</span><span class="chip">MIDAS Civil</span><span class="chip">Retrofitting</span>
+        <div class="edu-list">
+            <div class="edu-item reveal">
+                <div class="edu-degree">
+                    Ph.D., Civil and Environmental Engineering
+                </div>
+                <div class="edu-uni">Saitama University, Saitama, Japan</div>
+                <div class="edu-dates">October 2019 – September 2022</div>
             </div>
-        </div>
 
-        <div class="tl-item reveal d2">
-            <div class="tl-period">June 2015 – June 2016</div>
-            <div class="tl-role">Instructor (Part-time)</div>
-            <div class="tl-org">CCPEC, Lahore</div>
-            <ul class="tl-points">
-                <li>Conducted professional training on ETABS and SAP2000 for practising engineers and students.</li>
-            </ul>
-            <div class="tl-chips">
-                <span class="chip">ETABS</span><span class="chip">SAP2000</span><span class="chip">Training</span>
+            <div class="edu-item reveal d1">
+                <div class="edu-degree">
+                    M.Eng., Civil and Environmental Engineering
+                </div>
+                <div class="edu-uni">Saitama University, Saitama, Japan</div>
+                <div class="edu-dates">October 2017 – September 2019</div>
+            </div>
+
+            <div class="edu-item reveal d2">
+                <div class="edu-degree">
+                    Bachelor of Science in Civil Engineering
+                </div>
+                <div class="edu-uni">
+                    University of Engineering and Technology Lahore, Pakistan
+                </div>
+                <div class="edu-dates">
+                    October 2011 – June 2015 · Graduated with Honors
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
-<!-- ── RESEARCH ── -->
-<div id="research" class="alt-bg">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Focus Areas</div><h2 class="sec-title">Research Interests</h2></div>
-    <div class="research-grid">
-        <div class="r-card reveal">
-            <div class="r-icon"><i class="fas fa-layer-group"></i></div>
-            <h3>Structural/Geotechnical Earthquake Engineering &amp; SSI</h3>
-            <p>Nonlinear dynamic analysis of coupled soil–pile–structure systems; kinematic and inertial interaction effects.</p>
+<!-- Professional Experience -->
+<section id="experience">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Career</div>
+            <h2 class="sec-title">Professional Experience</h2>
         </div>
-        <div class="r-card reveal d1">
-            <div class="r-icon"><i class="fas fa-arrows-alt-v"></i></div>
-            <h3>Deep Foundation Dynamics</h3>
-            <p>Experimental and numerical assessment of single piles and pile groups under vertical, lateral, and combined seismic loading.</p>
-        </div>
-        <div class="r-card reveal d2">
-            <div class="r-icon"><i class="fas fa-code"></i></div>
-            <h3>Computational Geotechnics</h3>
-            <p>High-fidelity modelling of soil nonlinearity and boundary conditions using advanced finite element methods.</p>
-        </div>
-        <div class="r-card reveal">
-            <div class="r-icon"><i class="fas fa-shield-alt"></i></div>
-            <h3>Resilient Geostructures</h3>
-            <p>Performance-based seismic assessment and retrofitting strategies for foundations in seismically active regions.</p>
-        </div>
-        <div class="r-card reveal d1">
-            <div class="r-icon"><i class="fas fa-seedling"></i></div>
-            <h3>Infrastructure Sustainability</h3>
-            <p>Lifecycle performance of foundation systems and innovative soil-foundation enhancement techniques.</p>
-        </div>
-        <div class="r-card reveal d2">
-            <div class="r-icon"><i class="fas fa-flask"></i></div>
-            <h3>Experimental Investigation</h3>
-            <p>Shake-table and base-excitation experiments to validate numerical models and characterise soil behaviour under cyclic loading.</p>
-        </div>
-    </div>
-</div>
-</div>
 
-<!-- ── SKILLS ── -->
-<div>
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Tools &amp; Methods</div><h2 class="sec-title">Technical Skills</h2></div>
-    <div class="skills-grid">
-        <div class="skill-block reveal">
-            <h3>Finite Element Modelling</h3>
-            <div class="chips">
-                <span class="chip">PLAXIS 3D</span><span class="chip">Code_Aster</span><span class="chip">DIANA FEA</span><span class="chip">Abaqus</span>
+        <div class="timeline">
+            <div class="tl-item reveal">
+                <div class="tl-period">Oct 2022 – Present</div>
+                <div class="tl-role">Assistant Professor</div>
+                <div class="tl-org">
+                    Department of Civil and Environmental Engineering · Saitama University
+                </div>
+
+                <ul class="tl-points">
+                    <li>
+                        Research on nonlinear soil–pile and soil–structure interaction
+                        using experimental testing and FEM tools including Code_Aster,
+                        PLAXIS 3D, DIANA FEA, ABAQUS, and OpenSeesPy.
+                    </li>
+                    <li>
+                        Led a funded research project on vertical kinematic pile response
+                        under seismic loading, conducting vertical base-excitation experiments
+                        to quantify pile group dynamic behaviour.
+                    </li>
+                    <li>
+                        Co-supervised graduate research projects; contributed to international
+                        program administration.
+                    </li>
+                    <li>
+                        Delivered lectures in Scientific &amp; Technological English and
+                        International Communication; guest lectures in Earthquake Engineering,
+                        SSI, Pile Dynamics, and Structural Analysis.
+                    </li>
+                    <li>
+                        Participated as Keynote Speaker at an international conference on
+                        seismic soil–pile interaction.
+                    </li>
+                </ul>
+
+                <div class="tl-chips">
+                    <span class="chip">PLAXIS 3D</span>
+                    <span class="chip">Code_Aster</span>
+                    <span class="chip">DIANA FEA</span>
+                    <span class="chip">ABAQUS</span>
+                    <span class="chip">OpenSeesPy</span>
+                    <span class="chip">SSI</span>
+                </div>
+            </div>
+
+            <div class="tl-item reveal d1">
+                <div class="tl-period">June 2015 – September 2017</div>
+                <div class="tl-role">Junior Structural Engineer</div>
+                <div class="tl-org">
+                    NESPAK — National Engineering Services of Pakistan
+                </div>
+
+                <ul class="tl-points">
+                    <li>
+                        Structural analysis of buildings, bridges, and towers using
+                        ETABS/SAP2000, STAAD.Pro, MIDAS Civil/Gen, and PLS Tower.
+                    </li>
+                    <li>
+                        Developed seismic retrofitting strategies using FEM and site
+                        inspections; performed response spectrum analyses incorporating SSI.
+                    </li>
+                    <li>
+                        Contributed to flyover and transport infrastructure design; reviewed
+                        structural designs for Pakistan Motorways and CPEC projects.
+                    </li>
+                </ul>
+
+                <div class="tl-chips">
+                    <span class="chip">ETABS</span>
+                    <span class="chip">SAP2000</span>
+                    <span class="chip">STAAD.Pro</span>
+                    <span class="chip">MIDAS Civil</span>
+                    <span class="chip">Retrofitting</span>
+                </div>
+            </div>
+
+            <div class="tl-item reveal d2">
+                <div class="tl-period">June 2015 – June 2016</div>
+                <div class="tl-role">Instructor (Part-time)</div>
+                <div class="tl-org">CCPEC, Lahore</div>
+
+                <ul class="tl-points">
+                    <li>
+                        Conducted professional training on ETABS and SAP2000 for practising
+                        engineers and students.
+                    </li>
+                </ul>
+
+                <div class="tl-chips">
+                    <span class="chip">ETABS</span>
+                    <span class="chip">SAP2000</span>
+                    <span class="chip">Training</span>
+                </div>
             </div>
         </div>
-        <div class="skill-block reveal d1">
-            <h3>Programming</h3>
-            <div class="chips">
-                <span class="chip">Python</span><span class="chip">VB.NET</span><span class="chip">Fortran</span><span class="chip">OpenSeesPy</span>
-            </div>
+    </div>
+</section>
+
+<!-- Research Interests -->
+<section id="research" class="alt-bg">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Focus Areas</div>
+            <h2 class="sec-title">Research Interests</h2>
         </div>
-        <div class="skill-block reveal d1">
-            <h3>Research &amp; Analysis</h3>
-            <div class="chips">
-                <span class="chip">MATLAB</span><span class="chip">GNU Octave</span><span class="chip">SigmaPlot</span><span class="chip">Mathematica</span>
+
+        <div class="research-grid">
+            <div class="r-card reveal">
+                <div class="r-icon"><i class="fas fa-layer-group"></i></div>
+                <h3>Structural/Geotechnical Earthquake Engineering &amp; SSI</h3>
+                <p>
+                    Nonlinear dynamic analysis of coupled soil–pile–structure systems;
+                    kinematic and inertial interaction effects.
+                </p>
             </div>
-        </div>
-        <div class="skill-block reveal d2">
-            <h3>Structural Engineering Software</h3>
-            <div class="chips">
-                <span class="chip">ETABS</span><span class="chip">SAP2000</span><span class="chip">STAAD.Pro</span><span class="chip">TEKLA Structures</span>
+
+            <div class="r-card reveal d1">
+                <div class="r-icon"><i class="fas fa-arrows-alt-v"></i></div>
+                <h3>Deep Foundation Dynamics</h3>
+                <p>
+                    Experimental and numerical assessment of single piles and pile groups
+                    under vertical, lateral, and combined seismic loading.
+                </p>
             </div>
-        </div>
-        <div class="skill-block reveal d2" style="grid-column: span 2;">
-            <h3>Design Codes</h3>
-            <div class="chips">
-                <span class="chip">ACI 318</span><span class="chip">JSCE Specifications</span><span class="chip">GB 50010</span><span class="chip">ASCE 7</span><span class="chip">IBC-2024</span>
+
+            <div class="r-card reveal d2">
+                <div class="r-icon"><i class="fas fa-code"></i></div>
+                <h3>Computational Geotechnics</h3>
+                <p>
+                    High-fidelity modelling of soil nonlinearity and boundary conditions
+                    using advanced finite element methods.
+                </p>
+            </div>
+
+            <div class="r-card reveal">
+                <div class="r-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Resilient Geostructures</h3>
+                <p>
+                    Performance-based seismic assessment and retrofitting strategies for
+                    foundations in seismically active regions.
+                </p>
+            </div>
+
+            <div class="r-card reveal d1">
+                <div class="r-icon"><i class="fas fa-seedling"></i></div>
+                <h3>Infrastructure Sustainability</h3>
+                <p>
+                    Lifecycle performance of foundation systems and innovative
+                    soil-foundation enhancement techniques.
+                </p>
+            </div>
+
+            <div class="r-card reveal d2">
+                <div class="r-icon"><i class="fas fa-flask"></i></div>
+                <h3>Experimental Investigation</h3>
+                <p>
+                    Shake-table and base-excitation experiments to validate numerical
+                    models and characterise soil behaviour under cyclic loading.
+                </p>
             </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
-<!-- ── PUBLICATIONS ── -->
-<div id="publications" class="alt-bg">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Scholarly Output</div><h2 class="sec-title">Selected Publications</h2></div>
-    <div class="pub-list">
-        <div class="pub-item reveal">
-            <div class="pub-authors"><strong>Zafar U</strong>, Goit CS, Saitoh M, Fukuda R</div>
-            <div class="pub-title">Vertical impedance functions of pile groups under low-to-high loading amplitudes: numerical simulations and experimental validation.</div>
-            <div class="pub-venue">Earthquake Engineering and Engineering Vibration, Vol. 22, pp. 647–666, 2023</div>
+<!-- Technical Skills -->
+<section>
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Tools &amp; Methods</div>
+            <h2 class="sec-title">Technical Skills</h2>
         </div>
-        <div class="pub-item reveal d1">
-            <div class="pub-authors"><strong>Zafar U</strong>, Goit CS, Saitoh M</div>
-            <div class="pub-title">Influence of nonlinearities on the vertical kinematic interaction of piles.</div>
-            <div class="pub-venue">Proceedings of the 7th World Congress on Civil, Structural, and Environmental Engineering (CSEE'22) · Best Paper Award</div>
-        </div>
-        <div class="pub-item reveal d2">
-            <div class="pub-authors"><strong>Zafar U</strong>, Goit CS, Saitoh M</div>
-            <div class="pub-title">Experimental and Numerical Investigations on Vertical Dynamic Pile-to-Pile Interactions Considering Soil and Interface Nonlinearities.</div>
-            <div class="pub-venue">Bulletin of Earthquake Engineering, 2021</div>
+
+        <div class="skills-grid">
+            <div class="skill-block reveal">
+                <h3>Finite Element Modelling</h3>
+                <div class="chips">
+                    <span class="chip">PLAXIS 3D</span>
+                    <span class="chip">Code_Aster</span>
+                    <span class="chip">DIANA FEA</span>
+                    <span class="chip">Abaqus</span>
+                </div>
+            </div>
+
+            <div class="skill-block reveal d1">
+                <h3>Programming</h3>
+                <div class="chips">
+                    <span class="chip">Python</span>
+                    <span class="chip">VB.NET</span>
+                    <span class="chip">Fortran</span>
+                    <span class="chip">OpenSeesPy</span>
+                </div>
+            </div>
+
+            <div class="skill-block reveal d1">
+                <h3>Research &amp; Analysis</h3>
+                <div class="chips">
+                    <span class="chip">MATLAB</span>
+                    <span class="chip">GNU Octave</span>
+                    <span class="chip">SigmaPlot</span>
+                    <span class="chip">Mathematica</span>
+                </div>
+            </div>
+
+            <div class="skill-block reveal d2">
+                <h3>Structural Engineering Software</h3>
+                <div class="chips">
+                    <span class="chip">ETABS</span>
+                    <span class="chip">SAP2000</span>
+                    <span class="chip">STAAD.Pro</span>
+                    <span class="chip">TEKLA Structures</span>
+                </div>
+            </div>
+
+            <div class="skill-block reveal d2" style="grid-column: span 2;">
+                <h3>Design Codes</h3>
+                <div class="chips">
+                    <span class="chip">ACI 318</span>
+                    <span class="chip">JSCE Specifications</span>
+                    <span class="chip">GB 50010</span>
+                    <span class="chip">ASCE 7</span>
+                    <span class="chip">IBC-2024</span>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
-<!-- ── GRANTS & AWARDS ── -->
-<div>
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Recognition</div><h2 class="sec-title">Grants &amp; Honours</h2></div>
-    <div class="two-col">
-        <div class="award-item reveal">
-            <div class="award-name">Ohbo Naoto Fund · Saitama University, 2023</div>
-            <div class="award-detail">Supported research on Vertical Kinematic Response of Pile Foundations.</div>
+<!-- Publications -->
+<section id="publications" class="alt-bg">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Scholarly Output</div>
+            <h2 class="sec-title">Publications</h2>
         </div>
-        <div class="award-item reveal d1">
-            <div class="award-name">Best Paper Award · CSEE'22</div>
-            <div class="award-detail">Awarded at the 7th World Congress on Civil, Structural, and Environmental Engineering.</div>
+
+        <div class="pub-subsection reveal">
+            <h3 class="pub-subtitle">Journal Articles (Peer-Reviewed)</h3>
+
+            <div class="pub-list">
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Goit, C. S., Saitoh, M., et al. (2026)
+                    </div>
+                    <div class="pub-title">
+                        Influence of loading intensity on the vertical dynamic impedance
+                        of inclined pile groups in cohesionless soil.
+                    </div>
+                    <div class="pub-venue">
+                        <em>Bulletin of Earthquake Engineering</em>
+                    </div>
+                    <div class="pub-meta">
+                        <a href="https://doi.org/10.1007/s10518-026-02711-6"
+                           target="_blank" rel="noopener">
+                            https://doi.org/10.1007/s10518-026-02711-6
+                        </a>
+                        · 2025 JIF: 4.2 · SCIE · Q1
+                    </div>
+                </article>
+
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Goit, C. S., Saitoh, M., &amp; Fukuda, R. (2023)
+                    </div>
+                    <div class="pub-title">
+                        Vertical impedance functions of pile groups under low-to-high loading
+                        amplitudes: Numerical simulations and experimental validation.
+                    </div>
+                    <div class="pub-venue">
+                        <em>Earthquake Engineering and Engineering Vibration</em>, 22, 647–666.
+                    </div>
+                    <div class="pub-meta">
+                        <a href="https://doi.org/10.1007/s11803-023-2183-y"
+                           target="_blank" rel="noopener">
+                            https://doi.org/10.1007/s11803-023-2183-y
+                        </a>
+                        · 2024 JIF: 3.3 · SCIE · Q2
+                    </div>
+                </article>
+
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Goit, C. S., &amp; Saitoh, M. (2021)
+                    </div>
+                    <div class="pub-title">
+                        Experimental and Numerical Investigations on Vertical Dynamic
+                        Pile-to-Pile Interactions Considering Soil and Interface Nonlinearities.
+                    </div>
+                    <div class="pub-venue">
+                        <em>Bulletin of Earthquake Engineering</em>.
+                    </div>
+                    <div class="pub-meta">
+                        <a href="https://doi.org/10.1007/s10518-021-01186-x"
+                           target="_blank" rel="noopener">
+                            https://doi.org/10.1007/s10518-021-01186-x
+                        </a>
+                        · 2025 JIF: 4.2 · SCIE · Q1
+                    </div>
+                </article>
+            </div>
         </div>
-        <div class="award-item reveal d1">
-            <div class="award-name">Monbukagakusho (MEXT) Scholarship</div>
-            <div class="award-detail">Japanese Government scholarship for Master's and Doctoral studies at Saitama University.</div>
+
+        <div class="pub-subsection reveal">
+            <h3 class="pub-subtitle">Conference Papers (Peer-Reviewed Proceedings)</h3>
+
+            <div class="pub-list">
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Goit, C. S., &amp; Saitoh, M. (2022)
+                    </div>
+                    <div class="pub-title">
+                        Influence of nonlinearities on the vertical kinematic interaction of piles.
+                    </div>
+                    <div class="pub-venue">
+                        Proceedings of the 7th World Congress on Civil, Structural, and
+                        Environmental Engineering (CSEE 2022), 10–12 April 2022,
+                        virtual conference.
+                    </div>
+                    <div class="pub-meta">
+                        <a href="https://doi.org/10.11159/icsect22.173"
+                           target="_blank" rel="noopener">
+                            https://doi.org/10.11159/icsect22.173
+                        </a>
+                        · Indexed in Scopus and Google Scholar · Best Paper Award
+                    </div>
+                </article>
+            </div>
         </div>
-        <div class="award-item reveal d2">
-            <div class="award-name">Graduated with Honors · UET Lahore, 2015</div>
-            <div class="award-detail">Merit Certificate and scholarship awarded at Bachelor's graduation.</div>
-        </div>
-        <div class="award-item reveal d2">
-            <div class="award-name">Merit Scholarship · 2012</div>
-            <div class="award-detail">Academic merit scholarship during undergraduate studies.</div>
-        </div>
-        <div class="award-item reveal d3">
-            <div class="award-name">Award · UET Lahore Programming Competition, 2012</div>
-            <div class="award-detail">Recognised for excellence in university-level programming contest.</div>
+
+        <div class="pub-subsection reveal">
+            <h3 class="pub-subtitle">Accepted / Under Review</h3>
+
+            <div class="pub-list">
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Goit, C. S., Saitoh, M., et al. (2026)
+                    </div>
+                    <div class="pub-title">
+                        Experimental Investigation of Soil Amplification Under Linear and
+                        Nonlinear Vertical Base Excitation.
+                    </div>
+                    <div class="pub-venue">
+                        Accepted for presentation at ICCESB 2026; proceedings publication pending.
+                    </div>
+                    <div class="pub-meta">Status: Accepted</div>
+                </article>
+
+                <article class="pub-item">
+                    <div class="pub-authors">
+                        <strong>Zafar, U.</strong>, Saitoh, M., Goit, C. S., &amp; Mondol, M. (2026)
+                    </div>
+                    <div class="pub-title">
+                        Kinematic Response of Floating Single Pile under Vertical Loading:
+                        An Experimental Study.
+                    </div>
+                    <div class="pub-venue">
+                        Submitted to <em>Journal of Earthquake Engineering</em>.
+                    </div>
+                    <div class="pub-meta">
+                        2025 JIF: 2.9 · SCIE · Q1 · Manuscript under review
+                    </div>
+                </article>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
-<!-- ── CONTACT ── -->
-<div id="contact" class="alt-bg">
-<div class="content-section">
-    <div class="reveal"><div class="sec-label">Connect</div><h2 class="sec-title">Contact</h2></div>
-    <div class="contact-wrap reveal">
-        <div class="c-card">
-            <i class="fas fa-envelope"></i>
-            <div class="c-label">Email</div>
-            <div class="c-val"><a href="mailto:uzcivil@gmail.com">uzcivil@gmail.com</a></div>
+<!-- Grants and Awards -->
+<section>
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Recognition</div>
+            <h2 class="sec-title">Grants &amp; Honours</h2>
         </div>
-        <div class="c-card">
-            <i class="fas fa-phone"></i>
-            <div class="c-label">Phone</div>
-            <div class="c-val">+81-804952-5087</div>
-        </div>
-        <div class="c-card">
-            <i class="fas fa-map-marker-alt"></i>
-            <div class="c-label">Location</div>
-            <div class="c-val">Saitama University, Japan</div>
-        </div>
-        <div class="c-card">
-            <i class="fab fa-linkedin-in"></i>
-            <div class="c-label">LinkedIn</div>
-            <div class="c-val"><a href="https://www.linkedin.com/in/usamazafarcircle" target="_blank">usamazafarcircle</a></div>
-        </div>
-        <div class="c-card">
-            <i class="fas fa-globe"></i>
-            <div class="c-label">Research Group</div>
-            <div class="c-val"><a href="https://eq.civil.saitama-u.ac.jp/usama_zafar" target="_blank">Research Website</a></div>
+
+        <div class="two-col">
+            <div class="award-item reveal">
+                <div class="award-name">Ohbo Naoto Fund · Saitama University, 2023</div>
+                <div class="award-detail">
+                    Supported research on Vertical Kinematic Response of Pile Foundations.
+                </div>
+            </div>
+
+            <div class="award-item reveal d1">
+                <div class="award-name">Best Paper Award · CSEE'22</div>
+                <div class="award-detail">
+                    Awarded at the 7th World Congress on Civil, Structural, and Environmental Engineering.
+                </div>
+            </div>
+
+            <div class="award-item reveal d1">
+                <div class="award-name">Monbukagakusho (MEXT) Scholarship</div>
+                <div class="award-detail">
+                    Japanese Government scholarship for Master's and Doctoral studies at Saitama University.
+                </div>
+            </div>
+
+            <div class="award-item reveal d2">
+                <div class="award-name">Graduated with Honors · UET Lahore, 2015</div>
+                <div class="award-detail">
+                    Merit Certificate and scholarship awarded at Bachelor's graduation.
+                </div>
+            </div>
+
+            <div class="award-item reveal d2">
+                <div class="award-name">Merit Scholarship · 2012</div>
+                <div class="award-detail">
+                    Academic merit scholarship during undergraduate studies.
+                </div>
+            </div>
+
+            <div class="award-item reveal d3">
+                <div class="award-name">Award · UET Lahore Programming Competition, 2012</div>
+                <div class="award-detail">
+                    Recognised for excellence in university-level programming contest.
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</section>
 
-<!-- ── FOOTER ── -->
+<!-- Contact -->
+<section id="contact" class="alt-bg">
+    <div class="content-section">
+        <div class="reveal">
+            <div class="sec-label">Connect</div>
+            <h2 class="sec-title">Contact</h2>
+        </div>
+
+        <div class="contact-wrap reveal">
+            <div class="c-card">
+                <i class="fas fa-envelope"></i>
+                <div class="c-label">Email</div>
+                <div class="c-val">
+                    <a href="mailto:uzcivil@gmail.com">uzcivil@gmail.com</a>
+                </div>
+            </div>
+
+            <div class="c-card">
+                <i class="fas fa-phone"></i>
+                <div class="c-label">Phone</div>
+                <div class="c-val">+81-804952-5087</div>
+            </div>
+
+            <div class="c-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="c-label">Location</div>
+                <div class="c-val">Saitama University, Japan</div>
+            </div>
+
+            <div class="c-card">
+                <i class="fab fa-linkedin-in"></i>
+                <div class="c-label">LinkedIn</div>
+                <div class="c-val">
+                    <a href="https://www.linkedin.com/in/usamazafarcircle"
+                       target="_blank" rel="noopener">
+                        usamazafarcircle
+                    </a>
+                </div>
+            </div>
+
+            <div class="c-card">
+                <i class="fas fa-globe"></i>
+                <div class="c-label">Research Group</div>
+                <div class="c-val">
+                    <a href="https://eq.civil.saitama-u.ac.jp/usama_zafar"
+                       target="_blank" rel="noopener">
+                        Research Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer with Live Flag Counter -->
 <footer>
-    <p>&copy; <span id="yr"></span> <span>Dr. Usama Zafar</span> · Assistant Professor · Saitama University, Japan</p>
+    <p>
+        &copy; <span id="yr"></span>
+        <span>Dr. Usama Zafar</span> · Assistant Professor · Saitama University, Japan
+    </p>
+
+    <div class="visitor-counter">
+        <div class="visitor-counter-label">Visitors from around the world</div>
+
+        <a href="https://liveflagcounter.com/stats/Y07P0qP9"
+           target="_blank"
+           rel="noopener"
+           aria-label="View visitor flag counter statistics">
+            <img src="https://liveflagcounter.com/c/Y07P0qP9.png"
+                 alt="Live Flag Counter showing countries of website visitors"
+                 width="306"
+                 style="max-width:100%;height:auto"
+                 loading="lazy">
+        </a>
+    </div>
 </footer>
 
 <script>
+    // Automatically update the copyright year.
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // Cursor
-    const cur = document.getElementById('cur'), curR = document.getElementById('curR');
-    document.addEventListener('mousemove', e => {
-        cur.style.cssText  += `left:${e.clientX}px;top:${e.clientY}px`;
-        curR.style.cssText += `left:${e.clientX}px;top:${e.clientY}px`;
-    });
-    document.querySelectorAll('a,.r-card,.edu-item,.award-item,.pub-item,.chip').forEach(el => {
-        el.addEventListener('mouseenter', () => cur.style.transform = 'translate(-50%,-50%) scale(2.5)');
-        el.addEventListener('mouseleave', () => cur.style.transform = 'translate(-50%,-50%) scale(1)');
-    });
+    // Custom cursor.
+    const cur = document.getElementById('cur');
+    const curR = document.getElementById('curR');
 
-    // Nav on scroll
+    // Disable custom cursor behaviour on touch-only devices.
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        document.addEventListener('mousemove', e => {
+            cur.style.left = `${e.clientX}px`;
+            cur.style.top = `${e.clientY}px`;
+            curR.style.left = `${e.clientX}px`;
+            curR.style.top = `${e.clientY}px`;
+        });
+
+        document.querySelectorAll(
+            'a, button, .r-card, .edu-item, .award-item, .pub-item, .chip'
+        ).forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cur.style.transform = 'translate(-50%,-50%) scale(2.5)';
+            });
+
+            el.addEventListener('mouseleave', () => {
+                cur.style.transform = 'translate(-50%,-50%) scale(1)';
+            });
+        });
+    } else {
+        cur.style.display = 'none';
+        curR.style.display = 'none';
+        document.body.style.cursor = 'auto';
+    }
+
+    // Navigation style on scroll.
     const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
 
-    // Scroll reveal
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile slide-out navigation.
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        menuBackdrop.classList.remove('open');
+        document.body.classList.remove('menu-open');
+
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Open navigation menu');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+
+    menuToggle.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+
+        menuBackdrop.classList.toggle('open', isOpen);
+        document.body.classList.toggle('menu-open', isOpen);
+
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute(
+            'aria-label',
+            isOpen ? 'Close navigation menu' : 'Open navigation menu'
+        );
+
+        menuToggle.innerHTML = isOpen
+            ? '<i class="fas fa-times"></i>'
+            : '<i class="fas fa-bars"></i>';
+    });
+
+    menuBackdrop.addEventListener('click', closeMobileMenu);
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            closeMobileMenu();
+        }
+    });
+
+    // Reveal sections when they enter the viewport.
     const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); } });
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                obs.unobserve(entry.target);
+            }
+        });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        obs.observe(el);
+    });
 </script>
+
 </body>
 </html>
